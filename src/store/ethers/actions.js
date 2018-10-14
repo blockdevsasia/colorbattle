@@ -14,6 +14,8 @@ import {
 } from './ethersConnect';
 
 import ColorBattleContract from '../../contracts/abi.json'
+import { bigNumberify } from 'ethers/utils';
+import { Wallet } from 'ethers';
 
 export default {
   async connect(ctx) {
@@ -102,23 +104,28 @@ export default {
   },
   async freeCredits(ctx) {
 
-    let address = "0x2dad0123e3630535c29911b663cb2a3ef5bae5a1";
-  
-    
+    // contract address
+    let address = "0x65f9a2dfc14e736e33344bd5f68e88528de58e68";
 
-    let contract = new Contract(address, ColorBattleContract, getWallet());
-    console.warn(contract)
+    // my test rinkeby address
+    let privateKey = "754170781E5F414770E39FE3D1A48060A639C37D1B2A3274CA6C1026FC0CC0BE"
+    let myWallet = new Wallet(privateKey, getProvider())
+    let contract = new Contract(address, ColorBattleContract, myWallet);
+
     try{
-
-      let result = await contract.getBalance()
-      console.log("balance", result)
-
-      result = await contract.deposit({value: 1})
-      console.log("deposit", result)
+      let result = await contract.getBalance();
+      console.log("balance", result.toNumber());
+      
+      let tx = await contract.deposit();
+      console.log(tx.hash)
+      await tx.wait();
+      
+      let newBalance = await contract.getBalance()
+      console.log("New balance: ", newBalance.toNumber())
+      
     }catch(err){
       console.error(err)
     }
-
-    console.log(contract)
+    
   },
 }
