@@ -2,6 +2,12 @@ pragma solidity >=0.4.24 <0.6.0;
 
 contract ColorBattle
 {
+    address private owner;
+
+    constructor() public {
+        owner = msg.sender;
+        _create();
+    }
     enum GameState { Playing, Revealing, Decided }
     enum WinType {Red, Green, Blue, RedOverTie, GreenOverTie, BlueOverTie, AllTied}
     
@@ -44,6 +50,7 @@ contract ColorBattle
     
     uint256 constant minimumDepositAmount = 255 + 255 + 255;  // 765
     uint256 constant freeCreditsAmount = 100000;
+    uint256 constant addtlOneThousand = 1000;
 
     uint256 constant minimumRevealTimeSeconds = 1 seconds;
     uint256 constant minimumDecideTimeSeconds = 1 seconds;
@@ -54,7 +61,7 @@ contract ColorBattle
     mapping (address => uint256) private leaderboard;
     mapping (address => uint256) private deposits;
 
-    address private owner;
+    
     
     struct Game {
         GameState state;
@@ -75,10 +82,6 @@ contract ColorBattle
         uint24 revealed;
     }
     
-    constructor() public {
-        owner = msg.sender;
-        _create();
-    }
     
     // function withdraw()
     //     public
@@ -301,7 +304,7 @@ contract ColorBattle
         public
         payable
     {
-        deposits[msg.sender] += msg.value;
+        deposits[msg.sender] += addtlOneThousand;
     }
     
     function commitMove(bytes32 _blindedMove)
@@ -357,6 +360,6 @@ contract ColorBattle
         games[numGames].numRevealedMoves += 1;
 
         emit PlayerRevealed(msg.sender);
-        
+
     }
 }

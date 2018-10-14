@@ -4,7 +4,8 @@ import {
   providers,
   Wallet,
   Contract as ContractModule,
-  utils as utilsModule
+  utils as utilsModule,
+  ContractFactory
 } from 'ethers';
 import {
   promisify
@@ -48,6 +49,7 @@ let web3Provider;
 let userWallet;
 let providerInterval;
 let initialized;
+ 
 
 // web3 can be located in one of two places
 export function getWeb3() {
@@ -226,6 +228,7 @@ export const loadContractJSONFile = (contractBuildFolder, contractName) => {
     throw new Error(`Failed to load contract json from file with folder ${contractBuildFolder} and contract name ${contractName}`);
   }
 };
+
 
 // start web3 account/provider checker
 // since web3 does not yet have events! :( Doh...
