@@ -72,13 +72,13 @@ export default {
     const msg = err ? `There was an error: ${err.message}` : (oldAddress ?
       'You have been disconnected from your Ethereum connection. Please check MetaMask, etc.' :
       'You are not connected to an Ethereum node and wallet. Please check MetaMask, etc.')
-    alert(msg);
+    console.error(msg);
 
   },
   async logout(ctx) {
     ctx.commit('address', '');
     ctx.commit('user', '');
-    alert('You have been logged out from your Ethereum connection');
+    console.info('You have been logged out from your Ethereum connection');
   },
   async init(ctx) {
     event.$on(EVENT_CHANNEL, async function (msg) {
@@ -104,9 +104,10 @@ export default {
 
     let address = "0x2dad0123e3630535c29911b663cb2a3ef5bae5a1";
   
-    
+console.log("wallet" , getWallet())
+    let wallet = await getWallet()
 
-    let contract = new Contract(address, ColorBattleContract, getWallet());
+    let contract = new Contract(address, ColorBattleContract, wallet);
     console.warn(contract)
     try{
 
@@ -115,6 +116,7 @@ export default {
 
       result = await contract.deposit({value: 1})
       console.log("deposit", result)
+      
     }catch(err){
       console.error(err)
     }
