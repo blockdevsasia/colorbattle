@@ -38,7 +38,10 @@ export const Contract = ContractModule;
 // ethereum transactions to log
 // More information: https://docs.ethers.io/ethers.js/html/api-providers.html#events
 export const LOG_TRANSACTIONS = [
-  'block',
+  []
+  // 'block',
+  // 'pending',
+  // 'error',
   // can also be an address or transaction hash
   //[] // list of topics, empty for all topics
 ];
@@ -213,19 +216,6 @@ export async function getWalletAddress() {
 export function ready() {
   return !!web3Provider && !!userWallet;
 }
-
-export const loadContractJSONFile = (contractBuildFolder, contractName) => {
-  try {
-    const filename = contractBuildFolder + contractName + '.json';
-
-    const jsonStr = readFileSync(filename, 'utf8');
-    const json = JSON.parse(jsonStr);
-
-    return json;
-  } catch (err) {
-    throw new Error(`Failed to load contract json from file with folder ${contractBuildFolder} and contract name ${contractName}`);
-  }
-};
 
 // start web3 account/provider checker
 // since web3 does not yet have events! :( Doh...

@@ -11,7 +11,8 @@ const state = () => ({
   user: '',
   address: '',
   network: '',
-  ens: null
+  ens: null,
+  contract: null
 });
 
 export default {

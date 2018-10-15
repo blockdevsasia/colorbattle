@@ -21,4 +21,7 @@ export default {
   ens: function (state, value) {
     state.ens = value;
   },
+  contract: function (state, value) {
+    state.contract = value;
+  },
 }

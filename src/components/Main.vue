@@ -3,7 +3,9 @@
     <hr/>
     <chrome-picker :value="initialColor" @input="updateValue" :disable-alpha="true" :disable-fields="true" />
     <hr/>
-    <button @click="play">Play! {{buttonString}}</button>
+    <button @click="play">Play! {{buttonString}}</button><br/>
+    <button @click="deposit(7650)">Deposit 7650</button><br/>
+    <button @click="getBalance()">Get Balance</button><br/>
   </div>
 </template>
 
@@ -31,6 +33,12 @@ export default {
     },
     play() {
       this.$store.dispatch('ethers/freeCredits')
+    },
+    deposit(amount) {
+      this.$store.dispatch('ethers/deposit', amount)
+    },
+    getBalance() {
+      this.$store.dispatch('ethers/getBalance')
     }
   },
   props: {

@@ -10,10 +10,12 @@ import {
   getNetName,
   hasEns,
   Contract,
-  loadContractJSONFile
+  utils
 } from './ethersConnect';
 
-import ColorBattleContract from '../../contracts/abi.json'
+import ColorBattleContract from '../../constants/ColorBattleContract'
+import ethers from '.';
+
 
 export default {
   async connect(ctx) {
@@ -56,6 +58,9 @@ export default {
           ctx.commit('user', ens);
         }
       }
+
+      // Set the contract 
+      ctx.dispatch('loadContract');
     } catch (err) {
       ctx.dispatch('disconnect', err);
     }
@@ -98,29 +103,55 @@ export default {
     if (ready()) await ctx.dispatch('connect');
     event.$emit(EVENT_CHANNEL,MSGS.ETHERS_VUEX_INITIALIZED);
     console.log('Log in to your Ethereum wallet to see what it can do!');
+
     ctx.commit('initialized', true);
   },
-  async freeCredits(ctx) {
+  async loadContract(ctx) {
 
-    let address = "0x2dad0123e3630535c29911b663cb2a3ef5bae5a1";
-  
-console.log("wallet" , getWallet())
     let wallet = await getWallet()
+    let contract = new Contract(ColorBattleContract.address, ColorBattleContract.abi, wallet);
+    ctx.commit('contract', contract)
 
-    let contract = new Contract(address, ColorBattleContract, wallet);
-    console.warn(contract)
+    contract.on("PlayerDeposited", (player, amount, event) => {
+      console.log("Event: PlayerDeposited", event)  
+    });
+  },
+  async getBalance(ctx) {
+
+    let contract = ctx.state.contract;
+
     try{
+      const result = await contract.getBalance()
+      console.log("getBalance", result)
 
-      let result = await contract.getBalance()
-      console.log("balance", result)
-
-      result = await contract.deposit({value: 1})
-      console.log("deposit", result)
-      
     }catch(err){
       console.error(err)
     }
+  },
+  async freeCredits(ctx) {
 
-    console.log(contract)
+    let contract = ctx.state.contract;
+
+    try{
+      const result = await contract.freeCredits({gasLimit: 23000})
+      console.log("freeCredits", result)
+
+    }catch(err){
+      console.error(err)
+    }
+  },
+  async deposit(ctx, amount) {
+
+    let contract = ctx.state.contract;
+
+    try{
+      const result = await contract.deposit({
+        value: amount 
+      })
+      console.log("deposited", result)
+
+    }catch(err){
+      console.error(err)
+    }
   },
 }
