@@ -1,5 +1,8 @@
 # colorbattle
 
+## Dev environment setup
+Follow [https://github.com/blockdevsasia/ethdev_docker]
+
 ## Project setup
 ```
 yarn install
@@ -7,15 +10,6 @@ yarn install
 
 ### Compiles and hot-reloads for development
 ```
-yarn run serve
+yarn serve
 ```
 
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
